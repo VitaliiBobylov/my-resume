@@ -8,22 +8,26 @@ import { contactPage, initContactEvents } from "./pages/contact";
 const app = document.getElementById("app") as HTMLElement;
 if (!app) throw new Error("Елемент #app не знайдено");
 
-function render(): void {
+async function render(): Promise<void> {
   const hash = window.location.hash || "#home";
+
   switch (hash) {
     case "#about":
-      app.innerHTML = aboutPage();
+      app.innerHTML = await aboutPage();
       break;
+
     case "#services":
-      app.innerHTML = servicesPage();
+      app.innerHTML = await servicesPage();
       initServicesEvents();
       break;
+
     case "#contact":
-      app.innerHTML = contactPage();
+      app.innerHTML = await contactPage();
       initContactEvents();
       break;
+
     default:
-      app.innerHTML = homePage();
+      app.innerHTML = await homePage();
   }
 }
 
@@ -51,18 +55,24 @@ if (burgerBtn && nav) {
   });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+function initLogo(): void {
   const logoDiv = document.querySelector(".logo");
-  if (logoDiv) {
-    const logoImg = document.createElement("img");
-    logoImg.src = logoPath;
-    logoImg.alt = "BoviaN Logo";
-    logoImg.style.height = "50px";
-    logoImg.style.width = "auto";
-    logoImg.style.maxWidth = "160px";
-    logoDiv.appendChild(logoImg);
-  }
-  render();
+  if (!logoDiv) return;
+
+  const logoImg = document.createElement("img");
+  logoImg.src = logoPath;
+  logoImg.alt = "BoviaN Logo";
+  logoImg.style.height = "50px";
+  logoImg.style.width = "auto";
+  logoImg.style.maxWidth = "160px";
+  logoDiv.appendChild(logoImg);
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+  initLogo();
+  await render();
 });
 
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", async () => {
+  await render();
+});
