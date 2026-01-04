@@ -1,4 +1,4 @@
-(function(){const a=document.createElement("link").relList;if(a&&a.supports&&a.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))i(t);new MutationObserver(t=>{for(const n of t)if(n.type==="childList")for(const r of n.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&i(r)}).observe(document,{childList:!0,subtree:!0});function o(t){const n={};return t.integrity&&(n.integrity=t.integrity),t.referrerPolicy&&(n.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?n.credentials="include":t.crossOrigin==="anonymous"?n.credentials="omit":n.credentials="same-origin",n}function i(t){if(t.ep)return;t.ep=!0;const n=o(t);fetch(t.href,n)}})();const b="/assets/BoviaN-logo-BVsuSjCt.png";function h(){return`
+(function(){const a=document.createElement("link").relList;if(a&&a.supports&&a.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))i(t);new MutationObserver(t=>{for(const n of t)if(n.type==="childList")for(const r of n.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&i(r)}).observe(document,{childList:!0,subtree:!0});function o(t){const n={};return t.integrity&&(n.integrity=t.integrity),t.referrerPolicy&&(n.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?n.credentials="include":t.crossOrigin==="anonymous"?n.credentials="omit":n.credentials="same-origin",n}function i(t){if(t.ep)return;t.ep=!0;const n=o(t);fetch(t.href,n)}})();const b="/my-resume/assets/BoviaN-logo-BVsuSjCt.png";function h(){return`
       <section class="section" style="background:#f7f9fc;">
         <div class="container" style="text-align:center;">
           <img src="https://scontent-iev1-1.xx.fbcdn.net/v/t1.6435-9/36670159_515426672220347_5083859097858605056_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=eqqP8VxqzAkQ7kNvwFGkPp4&_nc_oc=Adly8cwVX-BXvsDfRINAhdbakHeBS-JKnC8NN4U6o39yn-QpJG9gTeRnFnl0TEv9Wbk&_nc_zt=23&_nc_ht=scontent-iev1-1.xx&_nc_gid=wccHGRomoPTN5Vx8qed3GQ&oh=00_AfncFonzFDlSxw8u6HpqUGYU399qbqpi55gkqT-0TBbe6g&oe=6971B8F0"
@@ -106,7 +106,7 @@
           </div>
         </div>
       </section>
-    `}const d="http://localhost:5000/api/projects";async function v(){return(await fetch(d)).json()}async function m(e){return(await fetch(d,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(e)})).json()}async function f(e){await fetch(`${d}/${e}`,{method:"DELETE"})}let p=[];function y(e){return`
+    `}const d="http://localhost:5000/api/projects";async function m(){return(await fetch(d)).json()}async function v(e){return(await fetch(d,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(e)})).json()}async function f(e){await fetch(`${d}/${e}`,{method:"DELETE"})}let p=[];function y(e){return`
     <div class="home-card">
       <img src="${e.image}" alt="${e.title}">
       <p>${e.description}</p>
@@ -115,7 +115,7 @@
         <button class="button delete-btn" data-id="${e._id}">Видалити</button>
       </div>
     </div>
-  `}async function w(){return p=await v(),`
+  `}async function w(){return p=await m(),`
     <section class="section">
       <div class="container">
         <h2>Проєкти</h2>
@@ -132,7 +132,7 @@
         </form>
       </div>
     </section>
-  `}function _(){const e=document.getElementById("project-form"),a=document.getElementById("projects-grid");e?.addEventListener("submit",async o=>{o.preventDefault();const i={title:document.getElementById("title").value,image:document.getElementById("image").value,description:document.getElementById("description").value,link:document.getElementById("link").value};await m(i),location.reload()}),a?.addEventListener("click",async o=>{const i=o.target;i.classList.contains("delete-btn")&&(await f(i.dataset.id),location.reload())})}function k(){return`
+  `}function _(){const e=document.getElementById("project-form"),a=document.getElementById("projects-grid");e?.addEventListener("submit",async o=>{o.preventDefault();const i={title:document.getElementById("title").value,image:document.getElementById("image").value,description:document.getElementById("description").value,link:document.getElementById("link").value};await v(i),location.reload()}),a?.addEventListener("click",async o=>{const i=o.target;i.classList.contains("delete-btn")&&(await f(i.dataset.id),location.reload())})}function k(){return`
       <section class="section">
         <div class="container">
           <h2>Контакти</h2>
