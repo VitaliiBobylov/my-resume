@@ -1,19 +1,41 @@
-import { getProjects, createProject, deleteProject, type Project, type NewProject } from "../api/projectsApi";
+import {
+  getProjects,
+  createProject,
+  deleteProject,
+  type Project,
+  type NewProject,
+} from "../api/projectsApi";
 import { isAuthenticated } from "../auth/auth";
 
 let projects: Project[] = [];
+let editProjectId: string | null = null;
 
 function renderProjectCard(project: Project): string {
   return `
     <div class="home-card">
       <div class="card-img-wrapper">
-        <img src="${project.image}" alt="${project.title}">
-        ${isAuthenticated() ? `<button class="icon-btn delete-btn" data-id="${project._id}">×</button>` : ""}
+        <img src="${project.image}" alt="${project.title}" />
+        ${
+          isAuthenticated()
+            ? `<button class="icon-btn delete-btn" data-id="${project._id}">×</button>`
+            : ""
+        }
       </div>
+
       <p>${project.description}</p>
+
       <div class="card-buttons">
-        <a class="button" href="${project.link}" target="_blank">Подивитися</a>
-        ${isAuthenticated() ? `<button class="button edit-btn" data-id="${project._id}">Редагувати</button>` : ""}
+        <a class="button" href="${project.link}" target="_blank">
+          Подивитися
+        </a>
+
+        ${
+          isAuthenticated()
+            ? `<button class="button edit-btn" data-id="${project._id}">
+                Редагувати
+              </button>`
+            : ""
+        }
       </div>
     </div>
   `;
@@ -26,50 +48,101 @@ export async function servicesPage(): Promise<string> {
     <section class="section">
       <div class="container">
         <h2>Проєкти</h2>
+
         <div class="home-grid" id="projects-grid">
           ${projects.map(renderProjectCard).join("")}
         </div>
 
-        ${isAuthenticated() ? `
-        <button id="toggle-form" class="button">Додати новий проєкт</button>
-        <form id="project-form" class="project-form hidden">
-          <input id="title" placeholder="Назва" required />
-          <input id="image" placeholder="Картинка URL" required />
-          <textarea id="description" placeholder="Опис" required></textarea>
-          <input id="link" placeholder="Посилання" required />
-          <button class="button">Додати</button>
-        </form>
-        ` : ""}
+        ${
+          isAuthenticated()
+            ? `
+          <button id="toggle-form" class="button add-project-btn">
+            Додати проєкт
+          </button>
+
+         <div id="project-modal" class="modal hidden">
+  <div class="modal-overlay"></div>
+
+  <div class="modal-content">
+    <button id="close-modal" class="modal-close">×</button>
+
+    <form id="project-form" class="project-form">
+
+      <input id="title" placeholder="Назва" required />
+      <input id="image" placeholder="Картинка URL" required />
+      <textarea id="description" placeholder="Опис" required></textarea>
+
+      <!-- ПОСИЛАННЯ -->
+      <input id="link-live" placeholder="Посилання на живу сторінку" required />
+      <input id="link-github" placeholder="Посилання на GitHub" />
+
+      <button class="button">Зберегти</button>
+    </form>
+  </div>
+</div>
+        `
+            : ""
+        }
       </div>
     </section>
   `;
 }
 
 export function initServicesEvents() {
-  const form = document.getElementById("project-form") as HTMLFormElement;
   const grid = document.getElementById("projects-grid");
-  const toggleFormBtn = document.getElementById("toggle-form");
+  const modal = document.getElementById("project-modal");
+  const openBtn = document.getElementById("toggle-form");
+  const closeBtn = document.getElementById("close-modal");
+  const form = document.getElementById("project-form") as HTMLFormElement;
 
-  // Показ/схов форми
-  toggleFormBtn?.addEventListener("click", () => {
-    form?.classList.toggle("hidden");
+  const liveRow = document.getElementById("live-link-row");
+  const liveLink = document.getElementById("live-link") as HTMLAnchorElement;
+
+  openBtn?.addEventListener("click", () => {
+    editProjectId = null;
+    form.reset();
+    liveRow?.classList.add("hidden");
+    modal?.classList.remove("hidden");
+  });
+
+  closeBtn?.addEventListener("click", () => {
+    modal?.classList.add("hidden");
+  });
+
+  modal?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).classList.contains("modal-overlay")) {
+      modal.classList.add("hidden");
+    }
   });
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const project: NewProject = {
+    const payload: NewProject = {
       title: (document.getElementById("title") as HTMLInputElement).value,
       image: (document.getElementById("image") as HTMLInputElement).value,
-      description: (document.getElementById("description") as HTMLTextAreaElement).value,
+      description: (
+        document.getElementById("description") as HTMLTextAreaElement
+      ).value,
       link: (document.getElementById("link") as HTMLInputElement).value,
     };
 
-    await createProject(project);
+    if (editProjectId) {
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/api/projects/${editProjectId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+    } else {
+      await createProject(payload);
+    }
+
     location.reload();
   });
 
-  // Події по кнопках "Редагувати" та "×"
   grid?.addEventListener("click", async (e) => {
     const btn = e.target as HTMLElement;
 
@@ -80,40 +153,23 @@ export function initServicesEvents() {
 
     if (btn.classList.contains("edit-btn")) {
       const id = btn.dataset.id!;
-      const project = projects.find(p => p._id === id);
+      const project = projects.find((p) => p._id === id);
       if (!project) return;
 
-      // Заповнюємо форму для редагування
-      if (form) {
-        form.classList.remove("hidden");
-        (document.getElementById("title") as HTMLInputElement).value = project.title;
-        (document.getElementById("image") as HTMLInputElement).value = project.image;
-        (document.getElementById("description") as HTMLTextAreaElement).value = project.description;
-        (document.getElementById("link") as HTMLInputElement).value = project.link;
-      }
+      editProjectId = id;
+      modal?.classList.remove("hidden");
 
-      // При сабміті форми перезаписати проект
-      form?.addEventListener("submit", async (ev) => {
-        ev.preventDefault();
-        await fetch(`${import.meta.env.VITE_API_URL}/api/projects/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: (document.getElementById("title") as HTMLInputElement).value,
-            image: (document.getElementById("image") as HTMLInputElement).value,
-            description: (document.getElementById("description") as HTMLTextAreaElement).value,
-            link: (document.getElementById("link") as HTMLInputElement).value,
-          }),
-        });
-        location.reload();
-      }, { once: true });
+      (document.getElementById("title") as HTMLInputElement).value =
+        project.title;
+      (document.getElementById("image") as HTMLInputElement).value =
+        project.image;
+      (document.getElementById("description") as HTMLTextAreaElement).value =
+        project.description;
+      (document.getElementById("link") as HTMLInputElement).value =
+        project.link;
+
+      liveLink.href = project.link;
+      liveRow?.classList.remove("hidden");
     }
   });
-
-  // Сховати кнопки для неавторизованих
-  if (!isAuthenticated()) {
-    document.querySelectorAll(".edit-btn, .delete-btn").forEach(btn => {
-      (btn as HTMLElement).style.display = "none";
-    });
-  }
 }
