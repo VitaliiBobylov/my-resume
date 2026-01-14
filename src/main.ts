@@ -1,16 +1,16 @@
 import "./css/styles.css";
-import { homePage } from "./pages/home/home.page";
 import { renderLayout } from "./components/Layout";
+import { resolveRoute } from "./app/router";
 
 const app = document.getElementById("app");
 if (!app) throw new Error("Root #app not found");
 
-// рендеримо одразу головну сторінку
+// Рендеримо сторінку при завантаженні
 window.addEventListener("DOMContentLoaded", () => {
-  renderLayout(homePage(), app);
+  renderLayout(resolveRoute(), app);
 });
 
-// якщо будуть хеші для інших сторінок
+// Рендеримо сторінку при зміні хеша
 window.addEventListener("hashchange", () => {
-  renderLayout(homePage(), app);
+  renderLayout(resolveRoute(), app);
 });
