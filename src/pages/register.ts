@@ -1,18 +1,50 @@
-export async function registerPage(): Promise<string> {
-    return `
-    <section class="section">
-      <div class="container">
-        <h2>Реєстрація</h2>
+export function registerPage(): HTMLElement {
+  const section = document.createElement("section");
+  section.className = "section";
 
-        <form id="registerForm" class="project-form">
-          <input type="text" id="name" placeholder="Ім'я" />
-          <input type="email" id="email" placeholder="Email" />
-          <input type="password" id="password" placeholder="Пароль" />
-          <button type="submit">Зареєструватися</button>
-        </form>
+  section.innerHTML = `
+    <div class="container">
+      <h2>Реєстрація</h2>
 
-        <p id="registerMessage" style="text-align:center;"></p>
-      </div>
-    </section>
+      <form class="project-form">
+        <input name="name" placeholder="Імʼя" required />
+        <input name="email" type="email" placeholder="Email" required />
+        <input name="password" type="password" placeholder="Пароль" required />
+        <button class="button">Зареєструватися</button>
+      </form>
+
+      <p class="form-message"></p>
+    </div>
   `;
+
+  const form = section.querySelector("form") as HTMLFormElement;
+  const message = section.querySelector(".form-message") as HTMLElement;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = Object.fromEntries(new FormData(form));
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!res.ok) throw new Error();
+
+      message.textContent = "Реєстрація успішна 🎉";
+      message.style.color = "green";
+      form.reset();
+    } catch {
+      message.textContent = "Помилка реєстрації";
+      message.style.color = "red";
+    }
+  });
+
+  return section;
 }

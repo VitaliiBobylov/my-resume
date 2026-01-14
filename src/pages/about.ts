@@ -1,23 +1,29 @@
-export function aboutPage(): string {
-  return `
-      <section class="section section--gradient">
-        <div class="container">
-          <h2>Про мене</h2>
-          <div class="cards">
-            <div class="card">
-              <h3>Landing page</h3>
-              <p>Односторінкові сайти для бізнесу.</p>
-            </div>
-            <div class="card">
-              <h3>SPA</h3>
-              <p>Прості односторінкові застосунки.</p>
-            </div>
-            <div class="card">
-              <h3>Підтримка</h3>
-              <p>Оновлення та покращення існуючих сайтів.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    `;
+export function aboutPage(): HTMLElement {
+  const section = document.createElement("section");
+  section.className = "section";
+
+  section.innerHTML = `
+    <div class="container">
+      <h2>Мої послуги</h2>
+
+      <div class="cards">
+        <a class="card" href="#services">
+          <h3>Landing Page</h3>
+          <p>Односторінкові сайти для бізнесу</p>
+        </a>
+
+        <a class="card" href="#services">
+          <h3>SPA</h3>
+          <p>Сучасні веб-застосунки</p>
+        </a>
+
+        <a class="card" href="#services">
+          <h3>Підтримка</h3>
+          <p>Оновлення та розвиток проєктів</p>
+        </a>
+      </div>
+    </div>
+  `;
+
+  return section;
 }
