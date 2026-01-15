@@ -1,4 +1,4 @@
-import { createHeader } from "./Header";
+import { createHeader } from "./Header/Header";
 import { createFooter } from "./Footer/Footer";
 
 let headerMounted = false;
