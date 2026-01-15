@@ -1,17 +1,28 @@
 import { createHeader } from "./Header";
-import { createFooter } from "./Footer";
+import { createFooter } from "./Footer/Footer";
 
-export function renderLayout(content: HTMLElement, root: HTMLElement) {
+let headerMounted = false;
+let footerMounted = false;
+
+export function renderLayout(
+  content: HTMLElement,
+  root: HTMLElement,
+  headerRoot: HTMLElement,
+  footerRoot: HTMLElement
+) {
+  // Header — тільки 1 раз
+  if (!headerMounted) {
+    headerRoot.appendChild(createHeader());
+    headerMounted = true;
+  }
+
+  // Footer — тільки 1 раз
+  if (!footerMounted) {
+    footerRoot.appendChild(createFooter());
+    footerMounted = true;
+  }
+
+  // Міняємо тільки контент
   root.innerHTML = "";
-
-  // Header
-  const header = createHeader();
-  root.before(header);
-
-  // Контент
   root.appendChild(content);
-
-  // Footer
-  const footer = createFooter();
-  root.after(footer);
 }

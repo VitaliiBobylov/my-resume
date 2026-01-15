@@ -1,16 +1,30 @@
+// src/main.ts
+
+// Імпортуємо стилі
 import "./css/styles.css";
+
+// Імпортуємо функції рендеру
 import { renderLayout } from "./components/Layout";
 import { resolveRoute } from "./app/router";
 
-const app = document.getElementById("app");
+// Отримуємо головний елемент з DOM
+const app: HTMLElement = document.getElementById("app")!;
+const headerRoot: HTMLElement = document.getElementById("header-root")!;
+const footerRoot: HTMLElement = document.getElementById("footer-root")!;
+
+// Перевірки (додатково для безпеки, можна прибрати, якщо впевнені)
 if (!app) throw new Error("Root #app not found");
+if (!headerRoot) throw new Error("Header #header-root not found");
+if (!footerRoot) throw new Error("Footer #footer-root not found");
 
-// Рендеримо сторінку при завантаженні
-window.addEventListener("DOMContentLoaded", () => {
-  renderLayout(resolveRoute(), app);
-});
+// Функція рендеру додатку
+async function renderApp(): Promise<void> {
+  const page = await resolveRoute();
+  renderLayout(page, app, headerRoot, footerRoot);
+}
 
-// Рендеримо сторінку при зміні хеша
-window.addEventListener("hashchange", () => {
-  renderLayout(resolveRoute(), app);
-});
+// Рендер при завантаженні сторінки
+window.addEventListener("DOMContentLoaded", renderApp);
+
+// Рендер при зміні хеша в URL
+window.addEventListener("hashchange", renderApp);
