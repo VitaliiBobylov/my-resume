@@ -1,8 +1,10 @@
 import { createHeader } from "./Header/Header";
 import { createFooter } from "./Footer/Footer";
+import { createAuthModal } from "./AuthModal/AuthModal";
 
 let headerMounted = false;
 let footerMounted = false;
+let modalMounted = false;
 
 export function renderLayout(
   content: HTMLElement,
@@ -10,19 +12,21 @@ export function renderLayout(
   headerRoot: HTMLElement,
   footerRoot: HTMLElement
 ) {
-  // Header — тільки 1 раз
   if (!headerMounted) {
     headerRoot.appendChild(createHeader());
     headerMounted = true;
   }
 
-  // Footer — тільки 1 раз
   if (!footerMounted) {
     footerRoot.appendChild(createFooter());
     footerMounted = true;
   }
 
-  // Міняємо тільки контент
+  if (!modalMounted) {
+    document.body.appendChild(createAuthModal());
+    modalMounted = true;
+  }
+
   root.innerHTML = "";
   root.appendChild(content);
 }

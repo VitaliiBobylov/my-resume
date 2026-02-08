@@ -1,16 +1,21 @@
+import logoPath from "../../assets/BoviaN-logo.png";
 import "./Footer.css";
-
 
 export function createFooter(): HTMLElement {
   const footer = document.createElement("footer");
   footer.className = "footer";
 
   footer.innerHTML = `
-    <div class="container">
-      <div class="footer-logo">BoviaN</div>
-      <p>Телефон: <a href="tel:+380932324038">+38 (093) 23-24-038</a></p>
-      
-      <div class="footer-socials contact-icons">
+    <div class="container footer-grid">
+      <div class="footer-left">
+        <p>Телефон: <a href="tel:+380932324038">+38 (093) 23-24-038</a></p>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-logo"></div>
+      </div>
+
+      <div class="footer-right contact-icons">
         <a href="https://t.me/Bobylov_Vitalii" target="_blank" aria-label="Telegram">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png" alt="Telegram">
         </a>
@@ -21,10 +26,25 @@ export function createFooter(): HTMLElement {
           <img src="https://www.svgrepo.com/show/110209/viber.svg" alt="Viber">
         </a>
       </div>
-
-      <p>© 2025 BoviaN. Усі права захищені.</p>
     </div>
+
+    <p class="footer-copy">© 2025 BoviaN. Усі права захищені.</p>
   `;
+
+  // Логотип у центрі
+  const footerLogoDiv = footer.querySelector(".footer-logo") as HTMLElement;
+
+  const logoImg = document.createElement("img");
+  logoImg.src = logoPath;
+  logoImg.alt = "BoviaN Logo";
+  logoImg.className = "footer-logo-img";
+
+  const logoText = document.createElement("span");
+  logoText.textContent = "BoviaN";
+  logoText.className = "footer-logo-text";
+
+  footerLogoDiv.appendChild(logoImg);
+  footerLogoDiv.appendChild(logoText);
 
   return footer;
 }

@@ -1,0 +1,83 @@
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+}
+
+.hidden {
+  display: none;
+}
+
+.auth-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.auth-box {
+  position: relative;
+  width: 320px;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-box h2 {
+  text-align: center;
+}
+
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-box input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Кнопка входу/submit зеленого кольору */
+.auth-box button[type="submit"] {
+  padding: 10px;
+  background: #28a745; /* зелений */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-box button[type="submit"]:hover {
+  background: #218838; /* темніший зелений при ховері */
+}
+
+/* Посилання Реєстрація та Забули пароль */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #28a745; /* зелений */
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.link-btn:hover {
+  color: #218838; /* темніший зелений при ховері */
+}

@@ -1,0 +1,54 @@
+/* Відступ зверху під фіксований header */
+.section {
+  padding-top: 80px; /* 64px header + трохи простору */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Контейнер карток */
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center; /* картки по центру */
+  margin-top: 20px;
+}
+
+/* Окремі картки */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+  width: 180px; /* однаковий розмір карток */
+  background-color: #fff;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Іконки карток */
+.card-icon {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Заголовок сторінки */
+.section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+}
