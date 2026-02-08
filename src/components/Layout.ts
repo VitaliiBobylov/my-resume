@@ -1,5 +1,5 @@
 import { createHeader } from "./Header/Header";
-import { createFooter } from "./Foo/Footer";
+import { createFooter } from "./Footer/Footer";
 import { createAuthModal } from "./AuthModal/AuthModal";
 
 let headerMounted = false;
